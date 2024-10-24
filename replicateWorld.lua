@@ -6,6 +6,7 @@ if #args < 1 then
     return
 end
 local dc = require("component").debug
+local computer = require("computer")
 local replWorld = dc.getWorld(tonumber(args[1]))
 local world = dc.getWorld(tonumber(args[2]))
 local strtobool = { ["true"]=true, ["false"]=false }
@@ -34,7 +35,7 @@ world.setBlocks(parsed.worldstart[1],parsed.worldstart[2],parsed.worldstart[3],p
 print("Cleared area")
 print(string.format("Starting replication at %s, %s, %s",parsed.worldstart[1],parsed.worldstart[2],parsed.worldstart[3]))
 local blockQuant = 0
-local startTime = os.time()
+local startTime = computer.uptime()
 for y=parsed.start[2],parsed.start[2]+parsed.radius[2] do
     for x=parsed.start[1],parsed.start[1]+parsed.radius[1] do
         for z=parsed.start[3],parsed.start[3]+parsed.radius[3] do
@@ -50,6 +51,6 @@ for y=parsed.start[2],parsed.start[2]+parsed.radius[2] do
         end
     end
 end
-local endTime = os.time()
+local endTime = computer.uptime()
 print("Replicated "..blockQuant.." blocks into this world.")
 print(string.format("Took %ss at %sb/s",endTime-startTime,(endTime-startTime)/blockQuant))

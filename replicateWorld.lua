@@ -5,9 +5,9 @@ if #args < 1 then
     print("     replicateWorld -9999 0 100,50,100 10,10,10 300,72,300 false")
     return
 end
-local dc = component.debug
+local dc = require("component").debug
 local replWorld = dc.getWorld(tonumber(args[1]))
-local world = dc.getWorld(args[2])
+local world = dc.getWorld(tonumber(args[2]))
 local replNBT = args[6]
 local parsed = {start = {}, radius = {}, worldstart = {}}
 local function split(inputstr, sep)
@@ -33,6 +33,7 @@ world.setBlocks(parsed.worldstart[1],parsed.worldstart[2],parsed.worldstart[3],p
 print("Cleared area")
 print(string.format("Starting replication at %s, %s, %s",parsed.worldstart[1],parsed.worldstart[2],parsed.worldstart[3]))
 local blockQuant = 0
+local startTime = os.time()
 for y=parsed.start[2],parsed.start[2]+parsed.radius[2] do
     for x=parsed.start[1],parsed.start[1]+parsed.radius[1] do
         for z=parsed.start[3],parsed.start[3]+parsed.radius[3] do
@@ -48,4 +49,6 @@ for y=parsed.start[2],parsed.start[2]+parsed.radius[2] do
         end
     end
 end
+local endTime = os.time()
 print("Replicated "..blockQuant.." blocks into this world.")
+print(string.format("Took %ss at %sb/s",endTime-startTime,(endTime-startTime)/blockQuant))

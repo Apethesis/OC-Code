@@ -1,13 +1,14 @@
 local args = {...}
 if #args < 1 then
     print("Usage:")
-    print("     replicateWorld replId toId startXYZ radXYZ toXYZ")
-    print("     replicateWorld -9999 0 100,50,100 10,10,10 300,72,300")
+    print("     replicateWorld replId toId startXYZ radXYZ toXYZ replicateNBT")
+    print("     replicateWorld -9999 0 100,50,100 10,10,10 300,72,300 false")
     return
 end
 local dc = component.debug
-local replId = tonumber(args[1])
+local replWorld = dc.getWorld(tonumber(args[1]))
 local world = dc.getWorld(args[2])
+local replNBT = args[6]
 local parsed = {start = {}, radius = {}, worldstart = {}}
 local function split(inputstr, sep)
     if sep == nil then
@@ -35,10 +36,14 @@ local blockQuant = 0
 for y=parsed.start[2],parsed.start[2]+parsed.radius[2] do
     for x=parsed.start[1],parsed.start[1]+parsed.radius[1] do
         for z=parsed.start[3],parsed.start[3]+parsed.radius[3] do
-            local _, type, block = dc.scanContentsAt(x,y,z,replId)
-            if type ~= "EntityLivingBase" and type ~= "EntityMinecart" and type ~= "air" then
+            local block, meta = replWorld.getBlockId(x,y,z), replWorld.getMetadata(x,y,z)
+            local dx, dy, dz = parsed.worldstart[1]+(x-parsed.start[1]),parsed.worldstart[2]+(y-parsed.start[2]),parsed.worldstart[3]+(z-parsed.start[3])
+            local nbt
+            if replNBT then nbt = replWorld.getTileNBT(x,y,z) end
+            if block ~= 0 then
                 blockQuant = blockQuant+1
-                world.setBlock(parsed.worldstart[1]+(x-parsed.start[1]),parsed.worldstart[2]+(y-parsed.start[2]),parsed.worldstart[3]+(z-parsed.start[3]),block[1])
+                world.setBlock(dx,dy,dz,block,meta)
+                if replNBT then world.setTileNBT(dx,dy,dz,nbt) end
             end
         end
     end

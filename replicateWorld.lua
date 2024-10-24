@@ -6,7 +6,7 @@ if #args < 1 then
     return
 end
 local dc = component.debug
-local replId = args[1]
+local replId = tonumber(args[1])
 local world = dc.getWorld()
 local parsed = {start = {}, radius = {}, worldstart = {}}
 local function split(inputstr, sep)

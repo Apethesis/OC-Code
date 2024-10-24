@@ -8,7 +8,8 @@ end
 local dc = require("component").debug
 local replWorld = dc.getWorld(tonumber(args[1]))
 local world = dc.getWorld(tonumber(args[2]))
-local replNBT = args[6]
+local strtobool = { ["true"]=true, ["false"]=false }
+local replNBT = strtobool[args[6]]
 local parsed = {start = {}, radius = {}, worldstart = {}}
 local function split(inputstr, sep)
     if sep == nil then

@@ -12,14 +12,14 @@ local replNBT = args[6]
 local parsed = {start = {}, radius = {}, worldstart = {}}
 local function split(inputstr, sep)
     if sep == nil then
-      sep = "%s"
+        sep = "%s"
     end
     local t = {}
     for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
-      table.insert(t, str)
+        table.insert(t, str)
     end
     return t
-  end
+end
   
 local function stringCoord(str)
     local pStr = split(str,",")
